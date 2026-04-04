@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    button {
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Book Appointment</h2>
+
+  <input id="name" placeholder="Name">
+  <input id="email" placeholder="Email">
+  <input id="phone" placeholder="Phone">
+  <input id="date" type="date">
+
+  <button onclick="sendData()">Submit</button>
+
+  <p id="msg"></p>
+</div>
+
+<script>
+async function sendData() {
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    date: document.getElementById("date").value
+  };
+
+  try {
+    const res = await fetch("https://aifl.fiuplus.cfd/webhook/51b3a9d5-09f9-4bf7-87db-1b04d92cfadb", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    document.getElementById("msg").innerText = "✅ Submitted successfully!";
+  } catch (err) {
+    document.getElementById("msg").innerText = "❌ Error!";
+  }
+}
+</script>
+
+</body>
+</html>
