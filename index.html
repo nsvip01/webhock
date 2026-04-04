@@ -29,6 +29,10 @@
       border: none;
       cursor: pointer;
     }
+    #msg {
+      margin-top: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -36,10 +40,10 @@
 <div class="box">
   <h2>Book Appointment</h2>
 
-  <input id="name" placeholder="Name">
-  <input id="email" placeholder="Email">
-  <input id="phone" placeholder="Phone">
-  <input id="date" type="date">
+  <input id="name" placeholder="Name" required>
+  <input id="email" placeholder="Email" required>
+  <input id="phone" placeholder="Phone" required>
+  <input id="date" type="date" required>
 
   <button onclick="sendData()">Submit</button>
 
@@ -48,6 +52,8 @@
 
 <script>
 async function sendData() {
+  const msg = document.getElementById("msg");
+
   const data = {
     name: document.getElementById("name").value,
     email: document.getElementById("email").value,
@@ -56,6 +62,8 @@ async function sendData() {
   };
 
   try {
+    msg.innerText = "⏳ Sending...";
+
     const res = await fetch("https://aifl.fiuplus.cfd/webhook/51b3a9d5-09f9-4bf7-87db-1b04d92cfadb", {
       method: "POST",
       headers: {
@@ -64,9 +72,21 @@ async function sendData() {
       body: JSON.stringify(data)
     });
 
-    document.getElementById("msg").innerText = "✅ Submitted successfully!";
+    // تحقق من نجاح الطلب
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error("Server Error: " + res.status + " - " + errorText);
+    }
+
+    const result = await res.json().catch(() => ({}));
+
+    console.log("Response:", result);
+
+    msg.innerText = "✅ Submitted successfully!";
+
   } catch (err) {
-    document.getElementById("msg").innerText = "❌ Error!";
+    console.error(err);
+    msg.innerText = "❌ Error: " + err.message;
   }
 }
 </script>
