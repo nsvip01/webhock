@@ -65,7 +65,7 @@ async function sendData() {
     msg.innerText = "⏳ Sending...";
 
     const res = await fetch("https://aifl.fiuplus.cfd/webhook/register", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
