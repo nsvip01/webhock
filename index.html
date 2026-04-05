@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Book Appointment</title>
+  <title>Registration Form</title>
   <style>
     body {
       font-family: Arial;
@@ -12,40 +12,58 @@
       align-items: center;
       height: 100vh;
     }
+
     .box {
       background: white;
       padding: 30px;
       border-radius: 10px;
       width: 300px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
     }
+
     input, button {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
     }
+
     button {
       background: black;
       color: white;
       border: none;
       cursor: pointer;
+      transition: 0.3s;
     }
+
+    button:hover {
+      background: #333;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     #msg {
       margin-top: 10px;
       font-size: 14px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
 <div class="box">
-  <h2>Book Appointment</h2>
+  <h2 style="text-align:center;">Registration</h2>
 
   <input id="name" placeholder="Name" required>
   <input id="email" placeholder="Email" required>
   <input id="phone" placeholder="Phone" required>
-  <input id="date" type="date" required>
 
-  <button onclick="sendData()">Submit</button>
+  <button id="submitBtn" onclick="sendData()">Submit</button>
 
   <p id="msg"></p>
 </div>
@@ -53,18 +71,25 @@
 <script>
 async function sendData() {
   const msg = document.getElementById("msg");
+  const btn = document.getElementById("submitBtn");
 
   const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    date: document.getElementById("date").value
+    name: document.getElementById("name").value.trim(),
+    email: document.getElementById("email").value.trim(),
+    phone: document.getElementById("phone").value.trim()
   };
 
+  // Basic validation
+  if (!data.name || !data.email || !data.phone) {
+    msg.innerText = "❗ Please fill all fields";
+    return;
+  }
+
   try {
+    btn.disabled = true;
     msg.innerText = "⏳ Sending...";
 
-    const res = await fetch("https://aifl.fiuplus.cfd/webhook/register", {
+    const res = await fetch("https://aifl.fiuplus.cfd/webhook/register-form", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -72,7 +97,6 @@ async function sendData() {
       body: JSON.stringify(data)
     });
 
-    // تحقق من نجاح الطلب
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error("Server Error: " + res.status + " - " + errorText);
@@ -84,9 +108,16 @@ async function sendData() {
 
     msg.innerText = "✅ Submitted successfully!";
 
+    // Reset form
+    document.getElementById("name").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("phone").value = "";
+
   } catch (err) {
     console.error(err);
     msg.innerText = "❌ Error: " + err.message;
+  } finally {
+    btn.disabled = false;
   }
 }
 </script>
