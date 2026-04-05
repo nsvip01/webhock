@@ -89,7 +89,7 @@ async function sendData() {
     btn.disabled = true;
     msg.innerText = "⏳ Sending...";
 
-    const res = await fetch("https://aifl.fiuplus.cfd/webhook-test/register-form", {
+    const res = await fetch("https://aifl.fiuplus.cfd/webhook/register-form", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
