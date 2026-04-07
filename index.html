@@ -5,366 +5,181 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clinical Triage Assistant</title>
+
   <style>
-    :root {
-      --primary-color: #0b5cff;
-      --primary-hover: #0849cc;
-      --bg-color: #f4f7fb;
-      --card-bg: #ffffff;
-      --text-main: #334155;
-      --text-muted: #64748b;
-      --border-color: #e2e8f0;
-      --error-color: #ef4444;
-      --success-color: #10b981;
-      --warning-color: #f59e0b;
-      --radius: 8px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.5;
-      padding: 2rem 1rem;
+      font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      padding: 20px;
     }
 
     .container {
       max-width: 600px;
-      margin: 0 auto;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-
-    .header h1 {
-      font-size: 1.8rem;
-      color: #1e293b;
-      margin-bottom: 0.5rem;
-    }
-
-    .header p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      margin: auto;
     }
 
     .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 2rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-      margin-bottom: 2rem;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
     }
 
-    .form-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: #1e293b;
-      font-size: 0.9rem;
-    }
-
-    .form-control {
+    input {
       width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius);
-      font-size: 1rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
     }
 
-    .form-control:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(11, 92, 255, 0.1);
-    }
-
-    .help-text {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-    }
-
-    .btn {
-      display: inline-block;
+    button {
       width: 100%;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: center;
-      border: none;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .btn-primary {
-      background-color: var(--primary-color);
+      padding: 12px;
+      background: #0b5cff;
       color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .btn:disabled {
-      background-color: #94a3b8;
-      cursor: not-allowed;
-    }
-
-    /* Loading spinner */
-    .spinner {
-      display: none;
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: white;
-      animation: spin 1s ease-in-out infinite;
-      vertical-align: middle;
-      margin-right: 0.5rem;
-    }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Results styling */
-    #resultSection {
-      display: none;
-    }
-
-    .result-card {
-      border-left: 4px solid var(--primary-color);
-    }
-
-    .result-item {
-      margin-bottom: 1rem;
-    }
-
-    .result-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .result-label {
-      font-weight: 600;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-    }
-
-    .result-value {
-      font-size: 1.05rem;
-      margin-top: 0.25rem;
-      color: #1e293b;
+      border: none;
+      cursor: pointer;
     }
 
     .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
 
-    .badge-low {
-      background: #d1fae5;
-      color: #065f46;
-    }
+    .low { background: #d1fae5; }
+    .moderate { background: #fef3c7; }
+    .high { background: #fee2e2; }
 
-    .badge-moderate {
-      background: #fef3c7;
-      color: #92400e;
-    }
+    #resultSection { display: none; }
 
-    .badge-high {
-      background: #fee2e2;
-      color: #991b1b;
-    }
-
-    .error-msg {
-      color: var(--error-color);
-      font-size: 0.9rem;
-      margin-top: 1rem;
-      display: none;
-    }
+    #errorMsg { color: red; }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h1>Clinical Triage Assistant</h1>
-      <p>Enter patient vitals for AI-assisted initial triage framing.</p>
-    </div>
+<div class="container">
 
-    <!-- Triage Form -->
-    <div class="card">
-      <form id="triageForm">
-        <div class="form-group">
-          <label for="painLevel">Pain Level (0-10)</label>
-          <input type="number" id="painLevel" class="form-control" name="painLevel" min="0" max="10" required>
-        </div>
+  <div class="card">
+    <h2>Clinical Triage Assistant</h2>
 
-        <div class="form-group">
-          <label for="bloodPressure">Blood Pressure</label>
-          <input type="text" id="bloodPressure" class="form-control" name="bloodPressure" placeholder="e.g. 120/80"
-            pattern="^\d{2,3}\/\d{2,3}$" required>
-          <div class="help-text">Format: Systolic/Diastolic</div>
-        </div>
+    <form id="triageForm">
+      <label>Pain Level</label>
+      <input type="number" id="painLevel" required>
 
-        <div class="form-group">
-          <label for="heartRate">Heart Rate (bpm)</label>
-          <input type="number" id="heartRate" class="form-control" name="heartRate" min="0" max="300" required>
-        </div>
+      <label>Blood Pressure</label>
+      <input type="text" id="bloodPressure" placeholder="120/80" required>
 
-        <div class="form-group">
-          <label for="temperature">Temperature (°C)</label>
-          <input type="number" id="temperature" class="form-control" name="temperature" step="0.1" min="25" max="45"
-            required>
-        </div>
+      <label>Heart Rate</label>
+      <input type="number" id="heartRate" required>
 
-        <div class="form-group">
-          <label for="respiratoryRate">Respiratory Rate (breaths/min)</label>
-          <input type="number" id="respiratoryRate" class="form-control" name="respiratoryRate" min="0" max="100"
-            required>
-        </div>
+      <label>Temperature</label>
+      <input type="number" step="0.1" id="temperature" required>
 
-        <button type="submit" id="submitBtn" class="btn btn-primary">
-          <span class="spinner" id="spinner"></span>
-          <span id="btnText">Analyze Vitals</span>
-        </button>
-        <div id="errorMsg" class="error-msg"></div>
-      </form>
-    </div>
+      <label>Respiratory Rate</label>
+      <input type="number" id="respiratoryRate" required>
 
-    <!-- Result Display -->
-    <div class="card result-card" id="resultSection">
-      <div class="result-item">
-        <div class="result-label">Risk Level</div>
-        <div class="result-value" id="resRiskLevel"></div>
-      </div>
-      <div class="result-item">
-        <div class="result-label">Urgency</div>
-        <div class="result-value" id="resUrgency"></div>
-      </div>
-      <div class="result-item">
-        <div class="result-label">Clinical Assessment</div>
-        <div class="result-value" id="resAssessment"></div>
-      </div>
-      <div class="result-item">
-        <div class="result-label">Initial Care Plan</div>
-        <div class="result-value" id="resCarePlan"></div>
-      </div>
-    </div>
+      <button type="submit" id="submitBtn">Analyze</button>
+    </form>
+
+    <div id="errorMsg"></div>
   </div>
 
-  <script>
-    // ==========================================
-    // CONFIGURATION
-    // Replace this URL with your LIVE n8n Webhook URL
-    // e.g. 'https://n8n.yourdomain.com/webhook/patient-ai' or 'https://your-instance.app.n8n.cloud/webhook/patient-ai'
-    // ==========================================
-    const N8N_WEBHOOK_URL = https://aifl.fiuplus.cfd/webhook-test/TRAGE;
+  <div class="card" id="resultSection">
+    <h3>Results</h3>
 
-      document.getElementById('triageForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+    <p><strong>Risk:</strong> <span id="risk"></span></p>
+    <p><strong>Urgency:</strong> <span id="urgency"></span></p>
+    <p><strong>Assessment:</strong> <span id="assessment"></span></p>
+    <p><strong>Care Plan:</strong> <span id="care"></span></p>
+  </div>
 
-        const submitBtn = document.getElementById('submitBtn');
-        const spinner = document.getElementById('spinner');
-        const btnText = document.getElementById('btnText');
-        const resultSection = document.getElementById('resultSection');
-        const errorMsg = document.getElementById('errorMsg');
+</div>
 
-        // Reset UI state
-        errorMsg.style.display = 'none';
-        resultSection.style.display = 'none';
+<script>
 
-        // 1. Collect Data
-        const patientData = {
-          painLevel: document.getElementById('painLevel').value,
-          bloodPressure: document.getElementById('bloodPressure').value,
-          heartRate: document.getElementById('heartRate').value,
-          temperature: document.getElementById('temperature').value,
-          respiratoryRate: document.getElementById('respiratoryRate').value
-        };
+const N8N_WEBHOOK_URL = "https://aifl.fiuplus.cfd/webhook-test/TRAGE";
 
-        // 2. Set Loading State
-        submitBtn.disabled = true;
-        spinner.style.display = 'inline-block';
-        btnText.textContent = 'Processing...';
+document.getElementById("triageForm").addEventListener("submit", async function(e){
+  e.preventDefault();
 
-        try {
-          // 3. Send Request to n8n Webhook
-          const response = await fetch(https://aifl.fiuplus.cfd/webhook-test/TRAGE, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json'
-          },
-            body: JSON.stringify(patientData)
-        });
+  const errorMsg = document.getElementById("errorMsg");
+  errorMsg.innerText = "";
 
-    if (!response.ok) {
-      throw new Error(`Server returned ${response.status}: ${response.statusText}`);
-    }
+  const patientData = {
+    painLevel: document.getElementById("painLevel").value,
+    bloodPressure: document.getElementById("bloodPressure").value,
+    heartRate: document.getElementById("heartRate").value,
+    temperature: document.getElementById("temperature").value,
+    respiratoryRate: document.getElementById("respiratoryRate").value
+  };
 
-    const result = await response.json();
+  console.log("Sending:", patientData);
 
-    // Ensure result is parsed if n8n returned a stringified JSON in a wrapper
-    const data = typeof result.output === 'string' ? JSON.parse(result.output) : (result.output || result);
+  try {
 
-    // 4. Update UI with Results
-    updateResultUI(data);
-
-      } catch (error) {
-      errorMsg.textContent = `Error connecting to AI service: ${error.message}. Is n8n running locally?`;
-      errorMsg.style.display = 'block';
-    } finally {
-      // Restore Button State
-      submitBtn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Analyze Vitals';
-    }
+    const response = await fetch(N8N_WEBHOOK_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(patientData)
     });
 
-    function updateResultUI(data) {
-      document.getElementById('resAssessment').textContent = data.assessment || 'N/A';
-      document.getElementById('resCarePlan').textContent = data.initial_care_plan || 'N/A';
-      document.getElementById('resUrgency').textContent = data.urgency || 'N/A';
-
-      // Handle Risk Level Badge
-      const riskEl = document.getElementById('resRiskLevel');
-      const risk = data.risk_level || 'Unknown';
-      let badgeClass = 'badge-moderate'; // Default
-
-      if (risk.toLowerCase().includes('low')) badgeClass = 'badge-low';
-      if (risk.toLowerCase().includes('high')) badgeClass = 'badge-high';
-
-      riskEl.innerHTML = `<span class="badge ${badgeClass}">${risk}</span>`;
-
-      // Show results
-      document.getElementById('resultSection').style.display = 'block';
-
-      // Smooth scroll to results
-      document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+    if (!response.ok) {
+      throw new Error("Server error: " + response.status);
     }
-  </script>
-</body>
 
+    let result = await response.json();
+    console.log("Raw Response:", result);
+
+    // 🔥 دعم الحالتين
+    let data = result;
+
+    if (result.output) {
+      if (typeof result.output === "string") {
+        try {
+          data = JSON.parse(result.output);
+        } catch {
+          data = { assessment: result.output };
+        }
+      } else {
+        data = result.output;
+      }
+    }
+
+    updateUI(data);
+
+  } catch (error) {
+    console.error(error);
+    errorMsg.innerText = "Error: " + error.message;
+  }
+
+});
+
+function updateUI(data) {
+
+  document.getElementById("assessment").innerText = data.assessment || "N/A";
+  document.getElementById("urgency").innerText = data.urgency || "N/A";
+  document.getElementById("care").innerText =
+    Array.isArray(data.initial_care_plan)
+      ? data.initial_care_plan.join(", ")
+      : data.initial_care_plan || "N/A";
+
+  const risk = data.risk_level || "Unknown";
+  const riskEl = document.getElementById("risk");
+
+  let cls = "moderate";
+
+  if (risk.toLowerCase().includes("low")) cls = "low";
+  if (risk.toLowerCase().includes("high")) cls = "high";
+
+  riskEl.innerHTML = `<span class="badge ${cls}">${risk}</span>`;
+
+  document.getElementById("resultSection").style.display = "block";
+}
+
+</script>
+
+</body>
 </html>
